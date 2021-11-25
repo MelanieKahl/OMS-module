@@ -4,31 +4,30 @@ from tkinter import ttk       # ttk is a set of widgets, buttons, styles, etc...
 import tkinter.font as font
 
 # LED Imports
-#import RPi.GPIO as GPIO   # necessary for use of GPIO pins
+import RPi.GPIO as GPIO   # necessary for use of GPIO pins
 from time import sleep
 
 # Camera Imports
-#from picamera import PiCamera
-#from fractions import Fraction
+from picamera import PiCamera
+from fractions import Fraction
 
-#cam = PiCamera(
-#    resolution=(2028, 1520),
-#    framerate=Fraction(1, 6),
-#    sensor_mode=3)
-#cam.shutter_speed = 200000
-#cam.iso = 600
+cam = PiCamera(
+    resolution=(2028, 1520),
+    framerate=Fraction(1, 6),
+    sensor_mode=3)
+
 
 ## --- LED Settings --- 
 # define using boardnumbers (1-14) oder GPIO numbers
-#GPIO.setmode(GPIO.BCM)   # using GPIO numbers
+GPIO.setmode(GPIO.BCM)   # using GPIO numbers
 # Define Pin als Output
-#GPIO.setup(15, GPIO.OUT)    # GPIO 15 / Board-Pin 10 - Ground 6
-#GPIO.setup(24, GPIO.OUT)    # GPIO 24 / Board-Pin 18 - Ground 14
+GPIO.setup(15, GPIO.OUT)    # GPIO 15 / Board-Pin 10 - Ground 6
+GPIO.setup(24, GPIO.OUT)    # GPIO 24 / Board-Pin 18 - Ground 14
 
 ## RAMPS Settings#
-#import serial
-#ramps = serial.Serial('COM3', 250000)  # define Port and Baudrate
-#print(ramps.name, 'is online')  # check Port's name
+import serial
+ramps = serial.Serial('/dev/ttyACM0', 250000)  # define Port and Baudrate
+print(ramps.name, 'is online')  # check Port's name
 
 ## --- Class Camera ---
 
@@ -74,7 +73,7 @@ class CameraSettings(ttk.Frame):
         iso_label = ttk.Label(self, text="ISO")
         iso_label.grid(row=1, column=0, rowspan=2)
         
-        #self.iso_value = tk.IntVar(value=400)   # in the controller
+        s#elf.iso_value = tk.IntVar(value=400)   # in the controller
 
         iso_one = ttk.Radiobutton(
             self,
@@ -253,10 +252,6 @@ class CameraSettings(ttk.Frame):
         cam.stop_preview()
 
 
-
-
-    
-
 class XYZZstage(ttk.Frame):
     def __init__(self, parent, controller, **kwargs):
         super().__init__(parent, **kwargs)
@@ -311,25 +306,25 @@ class XYZZstage(ttk.Frame):
     def ymax(self, *args):
         print('Move Y stage up')
         ramps.write(b'G91\n') # set to relative mode
-        ramps.write(b'G0 Y15 \n')
+        ramps.write(b'G0 Y10 \n')
         sleep(1)
 
     def xmin(self, *args):
         print('Move X stage down')
         ramps.write(b'G91\n') # set to relative mode
-        ramps.write(b'G0 X-51 \n')
+        ramps.write(b'G0 X-10 \n')
         sleep(1)
 
     def xmax(self, *args):
         print('Move X stage up')
         ramps.write(b'G91\n') # set to relative mode
-        ramps.write(b'G0 X15 \n')
+        ramps.write(b'G0 X10 \n')
         sleep(1)
 
     def ymin(self, *args):
         print('Move Y stage down')
         ramps.write(b'G91\n') # set to relative mode
-        ramps.write(b'G0 Y-15 \n')
+        ramps.write(b'G0 Y-10 \n')
         sleep(1)
 
     def zcoarseup(self, *args):
